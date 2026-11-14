@@ -247,6 +247,8 @@ final class Smarfle_BF_Render {
 			'questions' => $questions,
 			'address'   => ! empty( $booking['collect_address'] ),
 			'zip'       => ! empty( $booking['require_address'] ),
+			// The business's own choice in Smarfle: show prices on the booking form, or not.
+			'prices'    => ! isset( $booking['show_prices'] ) || ! empty( $booking['show_prices'] ),
 			'consent'   => '' !== $consent_html ? sanitize_text_field( $consent['booking_version'] ) : '',
 			'phone'     => $phone,
 			'strings'   => self::booking_strings( $phone ),

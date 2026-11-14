@@ -23,7 +23,7 @@ define( 'SMARFLE_BOOKING_FORMS_DIR', __DIR__ );
 
 // The shared Smarfle core (one connection for every Smarfle plugin on the site; the newest copy loads).
 require_once __DIR__ . '/includes/core/loader.php';
-smarfle_core_register( '1.1.0', __DIR__ . '/includes/core', plugins_url( 'includes/core', __FILE__ ) );
+smarfle_core_register( '1.2.0', __DIR__ . '/includes/core', plugins_url( 'includes/core', __FILE__ ) );
 
 require_once __DIR__ . '/includes/class-smarfle-booking-forms.php';
 add_action( 'plugins_loaded', array( 'Smarfle_Booking_Forms', 'init' ) );

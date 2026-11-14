@@ -62,6 +62,31 @@ final class Smarfle_Fallback {
 	}
 
 	/**
+	 * Sends a visitor's submission to Smarfle when it can take it (live account, the site's daily number not reached);
+	 * a temporary failure keeps a copy to send later. The caller emails the owner when this returns false.
+	 *
+	 * @param string $path    API path (/lead).
+	 * @param array  $payload JSON body.
+	 * @param string $kind    What to count this week (inquiries, quotes).
+	 * @return bool True when Smarfle took it.
+	 */
+	public static function send( $path, $payload, $kind ) {
+		$core = Smarfle_Core::instance();
+		if ( ! $core->is_live() || ! Smarfle_Visitor_Guard::take_site_day() ) {
+			return false;
+		}
+		$res = Smarfle_Api::call( 'POST', $path, $payload, array( 'type' => 'action' ) );
+		if ( $res['ok'] ) {
+			$core->count( $kind );
+			return true;
+		}
+		if ( self::is_temporary( $res ) ) {
+			self::queue( $path, $payload );
+		}
+		return false;
+	}
+
+	/**
 	 * Keeps a copy to send to Smarfle when it answers again.
 	 *
 	 * @param string $path    API path (/lead, ...).

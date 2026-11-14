@@ -77,7 +77,7 @@
 			] );
 		}
 		function priceText( sv ) {
-			if ( ! sv.price ) {
+			if ( ! sv.price || cfg.prices === false ) {
 				return '';
 			}
 			if ( sv.bySize ) {
