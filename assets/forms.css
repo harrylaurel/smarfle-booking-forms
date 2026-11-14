@@ -1,0 +1,140 @@
+/* Smarfle forms: plain, follows the theme's fonts and colors. Accent: --smarfle-accent (defaults to the theme's link color). */
+.smarfle-form-wrap {
+	--smarfle-accent: var(--wp--preset--color--primary, currentColor);
+	--smarfle-line: rgba(127, 127, 127, 0.35);
+	max-width: 640px;
+}
+.smarfle-form {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.smarfle-booking__form {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.smarfle-form p {
+	margin: 0;
+}
+.smarfle-form__heading {
+	margin: 0 0 4px;
+}
+.smarfle-form__row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+}
+.smarfle-form__row[hidden] {
+	display: none;
+}
+.smarfle-form__field label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+.smarfle-form input[type="text"],
+.smarfle-form input[type="email"],
+.smarfle-form input[type="tel"],
+.smarfle-form input[type="number"],
+.smarfle-form select,
+.smarfle-form textarea {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--smarfle-line);
+	border-radius: 6px;
+	font: inherit;
+	background: transparent;
+	color: inherit;
+}
+.smarfle-form select option {
+	color: #1e1e1e;
+}
+.smarfle-form__consent label {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	font-size: 0.85em;
+	line-height: 1.45;
+}
+.smarfle-form__consent input {
+	margin-top: 3px;
+	flex: none;
+}
+.smarfle-form__button {
+	cursor: pointer;
+}
+.smarfle-form__button[disabled] {
+	opacity: 0.6;
+	cursor: wait;
+}
+.smarfle-form__status:empty {
+	display: none;
+}
+.smarfle-hp {
+	position: absolute !important;
+	left: -9999px !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+.smarfle-booking__service {
+	font-weight: 600;
+}
+.smarfle-booking__days,
+.smarfle-booking__times {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.smarfle-chip {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	min-width: 64px;
+	padding: 8px 10px;
+	border: 1px solid var(--smarfle-line);
+	border-radius: 8px;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	line-height: 1.2;
+	cursor: pointer;
+}
+.smarfle-chip small {
+	font-size: 0.8em;
+	opacity: 0.8;
+}
+.smarfle-chip[aria-pressed="true"] {
+	border-color: var(--smarfle-accent);
+	box-shadow: inset 0 0 0 2px var(--smarfle-accent);
+	font-weight: 600;
+}
+.smarfle-chip[disabled] {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+.smarfle-booking__msg:empty {
+	display: none;
+}
+.smarfle-booking__done {
+	font-weight: 600;
+}
+.smarfle-credit {
+	margin: 8px 0 0;
+	font-size: 0.8em;
+	opacity: 0.75;
+}
+.smarfle-editor-note {
+	padding: 12px 16px;
+	border: 1px dashed #c3c4c7;
+	border-radius: 6px;
+	background: #f6f7f7;
+	color: #1e1e1e;
+	font-size: 14px;
+}
+.smarfle-editor-note p {
+	margin: 0 0 4px;
+}

@@ -1,0 +1,45 @@
+/* Smarfle admin page and dashboard box. */
+.smarfle-page .smarfle-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	padding: 16px 20px;
+	margin: 16px 0;
+	max-width: 760px;
+}
+.smarfle-page .smarfle-card h2 {
+	margin-top: 4px;
+}
+.smarfle-actions,
+.smarfle-checklist__step-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+	margin-top: 8px;
+}
+.smarfle-inline-form {
+	display: inline-block;
+	margin: 0;
+}
+.smarfle-checklist {
+	list-style: none;
+	margin: 12px 0 0;
+	padding: 0;
+}
+.smarfle-checklist > li {
+	border-top: 1px solid #f0f0f1;
+	padding: 12px 0;
+}
+.smarfle-checklist__done {
+	color: #008a20;
+	font-weight: 600;
+}
+.smarfle-week__counts {
+	font-size: 15px;
+	font-weight: 600;
+	margin: 0 0 8px;
+}
+.smarfle-week__trial {
+	color: #50575e;
+}

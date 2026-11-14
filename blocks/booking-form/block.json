@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "smarfle/booking-form",
+	"version": "1.0.0",
+	"title": "Smarfle booking form",
+	"category": "widgets",
+	"icon": "calendar-alt",
+	"description": "Online booking with your Smarfle services and real free times. Bookings land in your Smarfle calendar.",
+	"keywords": [ "booking", "appointment", "schedule", "smarfle" ],
+	"textdomain": "smarfle-booking-forms",
+	"attributes": {
+		"service": { "type": "string", "default": "" },
+		"office": { "type": "string", "default": "" },
+		"heading": { "type": "string", "default": "" }
+	},
+	"supports": { "html": false, "align": [ "wide", "full" ] },
+	"editorScript": "smarfle-bf-editor",
+	"editorStyle": "smarfle-forms"
+}

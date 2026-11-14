@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "smarfle/contact-form",
+	"version": "1.0.0",
+	"title": "Smarfle contact form",
+	"category": "widgets",
+	"icon": "email-alt",
+	"description": "A contact form that sends every inquiry to your Smarfle Inbox (or emails you without Smarfle).",
+	"keywords": [ "contact", "form", "lead", "smarfle" ],
+	"textdomain": "smarfle-booking-forms",
+	"attributes": {
+		"heading": { "type": "string", "default": "" },
+		"button": { "type": "string", "default": "" },
+		"form": { "type": "string", "default": "" }
+	},
+	"supports": { "html": false, "align": [ "wide", "full" ] },
+	"editorScript": "smarfle-bf-editor",
+	"editorStyle": "smarfle-forms"
+}
