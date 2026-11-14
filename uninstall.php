@@ -21,6 +21,13 @@ $smarfle_others = array_filter(
 if ( empty( $smarfle_others ) ) {
 	$smarfle_connection = get_option( 'smarfle_connection', array() );
 	if ( is_array( $smarfle_connection ) && ! empty( $smarfle_connection['site_key'] ) ) {
+		// The stored key is encrypted with this site's salt (Smarfle_Core::seal_key).
+		if ( ! class_exists( 'Smarfle_Core', false ) ) {
+			require_once __DIR__ . '/includes/core/class-smarfle-core.php';
+		}
+		$smarfle_connection['site_key'] = Smarfle_Core::open_key( (string) $smarfle_connection['site_key'] );
+	}
+	if ( is_array( $smarfle_connection ) && ! empty( $smarfle_connection['site_key'] ) ) {
 		$smarfle_base = defined( 'SMARFLE_API_BASE' ) ? untrailingslashit( (string) SMARFLE_API_BASE ) : 'https://www.smarfle.com';
 		wp_remote_post(
 			$smarfle_base . '/api/plugin/v1/disconnect',

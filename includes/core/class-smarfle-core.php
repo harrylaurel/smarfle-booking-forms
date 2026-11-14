@@ -222,18 +222,62 @@ final class Smarfle_Core {
 	 * @return bool
 	 */
 	public function is_connected() {
-		$c = $this->connection();
-		return ! empty( $c['site_key'] );
+		return '' !== $this->site_key();
 	}
 
 	/**
-	 * The site key (server side only).
+	 * The site key (server side only), decrypted.
 	 *
 	 * @return string
 	 */
 	public function site_key() {
 		$c = $this->connection();
-		return isset( $c['site_key'] ) ? (string) $c['site_key'] : '';
+		return isset( $c['site_key'] ) ? self::open_key( (string) $c['site_key'] ) : '';
+	}
+
+	/**
+	 * The secret the stored key is encrypted with: this site's own salt from wp-config.php, so a copy of the database
+	 * alone (a leaked backup) does not hold a usable key.
+	 *
+	 * @return string 32 bytes.
+	 */
+	private static function key_secret() {
+		return hash( 'sha256', wp_salt( 'auth' ) . '|smarfle-site-key', true );
+	}
+
+	/**
+	 * Encrypts the site key for storage (AES-256-GCM). Without OpenSSL the key is kept as it is.
+	 *
+	 * @param string $key Site key.
+	 * @return string
+	 */
+	public static function seal_key( $key ) {
+		if ( '' === $key || ! function_exists( 'openssl_encrypt' ) || ! in_array( 'aes-256-gcm', openssl_get_cipher_methods(), true ) ) {
+			return $key;
+		}
+		$iv  = random_bytes( 12 );
+		$tag = '';
+		$out = openssl_encrypt( $key, 'aes-256-gcm', self::key_secret(), OPENSSL_RAW_DATA, $iv, $tag );
+		return false === $out ? $key : 'enc1:' . base64_encode( $iv . $tag . $out ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- binary ciphertext stored as text.
+	}
+
+	/**
+	 * Decrypts a stored site key ('' when it cannot be read, for example after the site's salts changed: the owner then
+	 * connects again).
+	 *
+	 * @param string $stored Stored value.
+	 * @return string
+	 */
+	public static function open_key( $stored ) {
+		if ( 0 !== strpos( $stored, 'enc1:' ) ) {
+			return $stored;
+		}
+		$raw = base64_decode( substr( $stored, 5 ), true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- binary ciphertext stored as text.
+		if ( false === $raw || strlen( $raw ) < 29 || ! function_exists( 'openssl_decrypt' ) ) {
+			return '';
+		}
+		$out = openssl_decrypt( substr( $raw, 28 ), 'aes-256-gcm', self::key_secret(), OPENSSL_RAW_DATA, substr( $raw, 0, 12 ), substr( $raw, 12, 16 ) );
+		return false === $out ? '' : $out;
 	}
 
 	/**
@@ -512,7 +556,7 @@ final class Smarfle_Core {
 		update_option(
 			self::OPTION_CONNECTION,
 			array(
-				'site_key'     => sanitize_text_field( $res['data']['site_key'] ),
+				'site_key'     => self::seal_key( sanitize_text_field( $res['data']['site_key'] ) ),
 				'site_id'      => isset( $res['data']['site_id'] ) ? sanitize_text_field( $res['data']['site_id'] ) : '',
 				'business'     => isset( $res['data']['business']['name'] ) ? sanitize_text_field( $res['data']['business']['name'] ) : '',
 				'connected_at' => time(),
