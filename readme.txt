@@ -4,7 +4,7 @@ Tags: booking, appointments, contact form, leads, crm
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,7 +40,7 @@ Nothing is lost. Without an active Smarfle account, or if Smarfle is briefly unr
 
 = Light on your site =
 
-No jQuery or React on your pages, about 9 KB of script and 2 KB of styles, loaded only on pages that show a form. No cookies, no tracking, no external fonts. Your Smarfle key stays on your server and is never sent to visitors' browsers.
+No jQuery or React on your pages, about 9 KB of script and 2 KB of styles, loaded only on pages that show a form. No cookies and no external fonts. If a visitor arrives from a link with utm_source, utm_medium or utm_campaign, the form keeps those three values in the browser's session storage for that visit and sends them with the inquiry, so you can see which ad or post it came from (see External services). Your Smarfle key stays on your server and is never sent to visitors' browsers.
 
 == External services ==
 
@@ -51,7 +51,8 @@ What is sent, and when:
 * **When you press Connect to Smarfle**: you are sent to smarfle.com to sign in and approve the website. Smarfle receives your site's address and name, and gives the website a key (stored in your WordPress database, never shown to visitors). Address: https://www.smarfle.com/connect/wordpress and https://www.smarfle.com/api/plugin/v1/connect/token
 * **Once a week** (and when you press Refresh now, at most once a day): the website asks for your business info (services and prices, offices, booking settings, phone, consent wording). Sent: the key, the WordPress and PHP version and the installed Smarfle plugins. Address: https://www.smarfle.com/api/plugin/v1/site
 * **When a visitor opens the booking form**: the free times for the chosen service (one request returns 14 days and is kept on your site for 10 minutes). Address: https://www.smarfle.com/api/plugin/v1/slots
-* **When a visitor sends a form or books**: what they typed, the page address, utm_source / utm_medium / utm_campaign if the page had them, their IP address and browser (kept by Smarfle as proof when they agree to text messages). Addresses: https://www.smarfle.com/api/plugin/v1/lead and https://www.smarfle.com/api/plugin/v1/book
+* **When a visitor sends a form or books**: what they typed, the page address and title, and utm_source / utm_medium / utm_campaign if the page had them. Only when the visitor ticks the box agreeing to text messages, their IP address and browser are sent too, and Smarfle keeps them as the record of that consent. Without that box ticked, nothing about the visitor's device is sent. Addresses: https://www.smarfle.com/api/plugin/v1/lead and https://www.smarfle.com/api/plugin/v1/book
+* **When you turn on sending Contact Form 7 or WPForms entries** (off until you turn it on): each entry's fields and the page address are sent to Smarfle as an inquiry, never the visitor's IP address or browser. Address: https://www.smarfle.com/api/plugin/v1/lead
 * **When you press Disconnect or delete the last Smarfle plugin**: Smarfle is told to stop the website's key. Address: https://www.smarfle.com/api/plugin/v1/disconnect
 
 Smarfle Terms of Service: https://www.smarfle.com/terms
@@ -93,6 +94,11 @@ Only if you choose to: the setup asks once, and nothing is shown unless you say 
 4. A website booking in the Smarfle calendar.
 
 == Changelog ==
+
+= 1.0.1 =
+* The visitor's IP address and browser are sent only when the visitor agrees to text messages.
+* Safer consent links and escaped form output in the Elementor widgets.
+* The readme lists exactly what is sent to Smarfle.
 
 = 1.0.0 =
 * First release: booking form, contact form, Contact Form 7 and WPForms sending to Smarfle, setup checklist, dashboard box.

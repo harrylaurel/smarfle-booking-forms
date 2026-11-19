@@ -3,7 +3,7 @@
  * Plugin Name:       Smarfle Booking & Forms
  * Plugin URI:        https://www.smarfle.com/features/integrations
  * Description:       Online booking with real free times and contact forms that send every inquiry to your Smarfle Inbox. Also sends Contact Form 7 and WPForms entries to Smarfle. For US home service and local businesses with a Smarfle account.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            Smarfle
@@ -17,13 +17,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SMARFLE_BOOKING_FORMS_VERSION', '1.0.0' );
+define( 'SMARFLE_BOOKING_FORMS_VERSION', '1.0.1' );
 define( 'SMARFLE_BOOKING_FORMS_FILE', __FILE__ );
 define( 'SMARFLE_BOOKING_FORMS_DIR', __DIR__ );
 
 // The shared Smarfle core (one connection for every Smarfle plugin on the site; the newest copy loads).
 require_once __DIR__ . '/includes/core/loader.php';
-smarfle_core_register( '1.2.0', __DIR__ . '/includes/core', plugins_url( 'includes/core', __FILE__ ) );
+smarfle_core_register( '1.3.1', __DIR__ . '/includes/core', plugins_url( 'includes/core', __FILE__ ) );
 
 require_once __DIR__ . '/includes/class-smarfle-booking-forms.php';
 add_action( 'plugins_loaded', array( 'Smarfle_Booking_Forms', 'init' ) );

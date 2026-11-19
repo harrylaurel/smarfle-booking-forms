@@ -100,6 +100,6 @@ class Smarfle_BF_Elementor_Contact extends \Elementor\Widget_Base {
 				'form'    => isset( $s['form'] ) ? $s['form'] : '',
 			)
 		);
-		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the renderer escapes everything it prints.
+		echo wp_kses( $html, Smarfle_BF_Render::allowed_html() );
 	}
 }

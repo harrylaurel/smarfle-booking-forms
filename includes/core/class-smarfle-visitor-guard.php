@@ -87,6 +87,24 @@ final class Smarfle_Visitor_Guard {
 	}
 
 	/**
+	 * The visitor's address and browser, only when the visitor ticked the text-message consent box: Smarfle keeps them
+	 * as the proof of that consent. Without consent nothing about the visitor's device is sent (WordPress.org
+	 * guidelines 7 and 9).
+	 *
+	 * @param bool $consent Whether the visitor gave text-message consent.
+	 * @return array
+	 */
+	public static function consent_proof( $consent ) {
+		if ( ! $consent ) {
+			return array();
+		}
+		return array(
+			'visitor_ip'    => self::visitor_ip(),
+			'visitor_agent' => self::visitor_agent(),
+		);
+	}
+
+	/**
 	 * The visitor's browser (for the text-consent record).
 	 *
 	 * @return string

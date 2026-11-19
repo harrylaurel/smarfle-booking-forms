@@ -161,11 +161,9 @@ final class Smarfle_Booking_Forms {
 		}
 		self::forward_existing_form(
 			array(
-				'form'          => method_exists( $contact_form, 'title' ) ? sanitize_text_field( $contact_form->title() ) : 'Contact Form 7',
-				'fields'        => $fields,
-				'page_url'      => esc_url_raw( (string) $submission->get_meta( 'url' ) ),
-				'visitor_ip'    => sanitize_text_field( (string) $submission->get_meta( 'remote_ip' ) ),
-				'visitor_agent' => substr( sanitize_text_field( (string) $submission->get_meta( 'user_agent' ) ), 0, 300 ),
+				'form'     => method_exists( $contact_form, 'title' ) ? sanitize_text_field( $contact_form->title() ) : 'Contact Form 7',
+				'fields'   => $fields,
+				'page_url' => esc_url_raw( (string) $submission->get_meta( 'url' ) ),
 			)
 		);
 	}
@@ -195,11 +193,9 @@ final class Smarfle_Booking_Forms {
 		$referer = wp_get_referer();
 		self::forward_existing_form(
 			array(
-				'form'          => isset( $form_data['settings']['form_title'] ) ? sanitize_text_field( $form_data['settings']['form_title'] ) : 'WPForms',
-				'fields'        => $out,
-				'page_url'      => $referer ? esc_url_raw( $referer ) : '',
-				'visitor_ip'    => Smarfle_Visitor_Guard::visitor_ip(),
-				'visitor_agent' => Smarfle_Visitor_Guard::visitor_agent(),
+				'form'     => isset( $form_data['settings']['form_title'] ) ? sanitize_text_field( $form_data['settings']['form_title'] ) : 'WPForms',
+				'fields'   => $out,
+				'page_url' => $referer ? esc_url_raw( $referer ) : '',
 			)
 		);
 	}

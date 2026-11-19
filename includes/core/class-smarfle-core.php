@@ -457,6 +457,22 @@ final class Smarfle_Core {
 		return $stats;
 	}
 
+	/* ------------------------------------------------------------------ Block wrapper */
+
+	/**
+	 * Puts a block's own wrapper around what a Smarfle renderer drew, so the editor's block settings (wide or full
+	 * width, an extra CSS class) apply. Shortcodes and Elementor widgets do not call this. An empty answer stays empty.
+	 *
+	 * @param string $html The block's HTML.
+	 * @return string
+	 */
+	public static function block_wrap( $html ) {
+		if ( '' === trim( (string) $html ) || ! function_exists( 'get_block_wrapper_attributes' ) ) {
+			return (string) $html;
+		}
+		return '<div ' . get_block_wrapper_attributes() . '>' . $html . '</div>';
+	}
+
 	/* ------------------------------------------------------------------ Credit line (off unless the owner says yes) */
 
 	/**

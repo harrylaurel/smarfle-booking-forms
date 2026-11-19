@@ -156,9 +156,8 @@ final class Smarfle_BF_Endpoints {
 				'page_title'      => self::text( $r, 'page_title', 200 ),
 				'sms_consent'     => $consent,
 				'consent_version' => $consent ? $version : '',
-				'visitor_ip'      => Smarfle_Visitor_Guard::visitor_ip(),
-				'visitor_agent'   => Smarfle_Visitor_Guard::visitor_agent(),
 			),
+			Smarfle_Visitor_Guard::consent_proof( $consent ),
 			self::utm( $r )
 		);
 		$lines   = array(
@@ -370,9 +369,8 @@ final class Smarfle_BF_Endpoints {
 				'sms_consent'     => $consent,
 				'consent_version' => $consent ? $version : '',
 				'page_url'        => self::page_url( $r ),
-				'visitor_ip'      => Smarfle_Visitor_Guard::visitor_ip(),
-				'visitor_agent'   => Smarfle_Visitor_Guard::visitor_agent(),
 			),
+			Smarfle_Visitor_Guard::consent_proof( $consent ),
 			self::utm( $r )
 		);
 

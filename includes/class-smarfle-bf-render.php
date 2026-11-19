@@ -29,7 +29,7 @@ final class Smarfle_BF_Render {
 	 * @return string
 	 */
 	public static function booking_block( $attributes ) {
-		return self::booking_form( is_array( $attributes ) ? $attributes : array() );
+		return Smarfle_Core::block_wrap( self::booking_form( is_array( $attributes ) ? $attributes : array() ) );
 	}
 
 	/**
@@ -39,7 +39,7 @@ final class Smarfle_BF_Render {
 	 * @return string
 	 */
 	public static function contact_block( $attributes ) {
-		return self::contact_form( is_array( $attributes ) ? $attributes : array() );
+		return Smarfle_Core::block_wrap( self::contact_form( is_array( $attributes ) ? $attributes : array() ) );
 	}
 
 	/**
@@ -406,22 +406,112 @@ final class Smarfle_BF_Render {
 	 * @return string Escaped HTML.
 	 */
 	private static function linked_consent( $text, $consent ) {
-		$html  = esc_html( $text );
+		$plain = (string) $text;
 		$links = array(
-			'SMS Policy'     => isset( $consent['sms_policy_url'] ) ? $consent['sms_policy_url'] : '',
-			'Privacy Policy' => isset( $consent['privacy_url'] ) ? $consent['privacy_url'] : '',
-			'Terms'          => isset( $consent['terms_url'] ) ? $consent['terms_url'] : '',
+			'SMS Policy'     => isset( $consent['sms_policy_url'] ) ? (string) $consent['sms_policy_url'] : '',
+			'Privacy Policy' => isset( $consent['privacy_url'] ) ? (string) $consent['privacy_url'] : '',
+			'Terms'          => isset( $consent['terms_url'] ) ? (string) $consent['terms_url'] : '',
 		);
+		// Where each linked phrase sits in the plain text (first time only, never overlapping), so a link is built
+		// from the text alone and nothing is ever replaced inside markup that was already added.
+		$found = array();
 		foreach ( $links as $words => $url ) {
-			if ( '' === $url ) {
+			if ( '' === $url || '' === esc_url( $url ) ) {
 				continue;
 			}
-			$pos = strpos( $html, $words );
-			if ( false !== $pos ) {
-				$html = substr_replace( $html, '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . $words . '</a>', $pos, strlen( $words ) );
+			$pos = strpos( $plain, $words );
+			if ( false === $pos ) {
+				continue;
 			}
+			foreach ( $found as $f ) {
+				if ( $pos < $f['end'] && $pos + strlen( $words ) > $f['start'] ) {
+					continue 2;
+				}
+			}
+			$found[] = array(
+				'start' => $pos,
+				'end'   => $pos + strlen( $words ),
+				'words' => $words,
+				'url'   => $url,
+			);
 		}
-		return $html;
+		usort(
+			$found,
+			function ( $a, $b ) {
+				return $a['start'] - $b['start'];
+			}
+		);
+		$html = '';
+		$at   = 0;
+		foreach ( $found as $f ) {
+			$html .= esc_html( substr( $plain, $at, $f['start'] - $at ) );
+			$html .= '<a href="' . esc_url( $f['url'] ) . '" target="_blank" rel="noopener">' . esc_html( $f['words'] ) . '</a>';
+			$at    = $f['end'];
+		}
+		return $html . esc_html( substr( $plain, $at ) );
+	}
+
+	/**
+	 * The markup the forms use, for wp_kses() where a form is echoed (the Elementor widgets).
+	 *
+	 * @return array
+	 */
+	public static function allowed_html() {
+		$common = array(
+			'class'       => true,
+			'id'          => true,
+			'role'        => true,
+			'aria-hidden' => true,
+			'aria-live'   => true,
+			'aria-label'  => true,
+			'data-*'      => true,
+		);
+		$field  = array_merge(
+			$common,
+			array(
+				'type'         => true,
+				'name'         => true,
+				'value'        => true,
+				'required'     => true,
+				'maxlength'    => true,
+				'autocomplete' => true,
+				'tabindex'     => true,
+				'checked'      => true,
+				'placeholder'  => true,
+				'rows'         => true,
+				'disabled'     => true,
+			)
+		);
+		return array(
+			'form'     => array_merge( $common, array( 'novalidate' => true ) ),
+			'div'      => $common,
+			'p'        => $common,
+			'span'     => $common,
+			'h3'       => $common,
+			'strong'   => $common,
+			'small'    => $common,
+			'br'       => array(),
+			'template' => $common,
+			'noscript' => array(),
+			'label'    => array_merge( $common, array( 'for' => true ) ),
+			'input'    => $field,
+			'textarea' => $field,
+			'button'   => array_merge(
+				$common,
+				array(
+					'type'     => true,
+					'disabled' => true,
+				)
+			),
+			'a'        => array_merge(
+				$common,
+				array(
+					'href'   => true,
+					'target' => true,
+					'rel'    => true,
+				)
+			),
+		);
 	}
 
 	/**

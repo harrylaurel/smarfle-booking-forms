@@ -113,6 +113,6 @@ class Smarfle_BF_Elementor_Booking extends \Elementor\Widget_Base {
 				'office'  => isset( $s['office'] ) ? $s['office'] : '',
 			)
 		);
-		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the renderer escapes everything it prints.
+		echo wp_kses( $html, Smarfle_BF_Render::allowed_html() );
 	}
 }
